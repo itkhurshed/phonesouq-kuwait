@@ -245,13 +245,15 @@
   // ---- Featured brands: hand-curated product lines (phones + accessories) ----
   var FEATURED_RAW = [
     // Apple
-    { brand: 'apple', name: 'iPhone 16 Pro Max', price: 599, cat: 'smartphones', tags: ['new'] },
+    { brand: 'apple', name: 'iPhone 17 Pro Max', price: 649, cat: 'smartphones', tags: ['new'] },
+    { brand: 'apple', name: 'iPhone 16 Pro Max', price: 599, cat: 'smartphones', tags: [] },
     { brand: 'apple', name: 'iPhone 16', price: 349, cat: 'smartphones', tags: [] },
     { brand: 'apple', name: 'iPhone 15', price: 279, oldPrice: 309, cat: 'smartphones', tags: ['sale'] },
     { brand: 'apple', name: 'MagSafe Charger', price: 12.5, cat: 'accessories', tags: [] },
     { brand: 'apple', name: 'AirPods Pro 2', price: 69, cat: 'accessories', tags: [] },
     // Samsung
-    { brand: 'samsung', name: 'Galaxy S24 Ultra', price: 429, cat: 'smartphones', tags: ['new'] },
+    { brand: 'samsung', name: 'Galaxy S26 Ultra', price: 459, cat: 'smartphones', tags: ['new'] },
+    { brand: 'samsung', name: 'Galaxy S24 Ultra', price: 429, cat: 'smartphones', tags: [] },
     { brand: 'samsung', name: 'Galaxy Z Fold6', price: 599, cat: 'smartphones', tags: [] },
     { brand: 'samsung', name: 'Galaxy A55 5G', price: 139, oldPrice: 159, cat: 'smartphones', tags: ['sale'] },
     { brand: 'samsung', name: '45W Super Fast Charger', price: 15, cat: 'accessories', tags: [] },
@@ -311,7 +313,8 @@
     { brand: 'realme', name: '67W Dart Charge', price: 7.5, cat: 'accessories', tags: [] },
     { brand: 'realme', name: 'Buds Air 6', price: 14, cat: 'accessories', tags: [] },
     // Google Pixel
-    { brand: 'google-pixel', name: 'Pixel 9 Pro', price: 399, cat: 'smartphones', tags: ['new'] },
+    { brand: 'google-pixel', name: 'Pixel 10 Pro XL', price: 429, cat: 'smartphones', tags: ['new'] },
+    { brand: 'google-pixel', name: 'Pixel 9 Pro', price: 399, cat: 'smartphones', tags: [] },
     { brand: 'google-pixel', name: 'Pixel 9', price: 299, cat: 'smartphones', tags: [] },
     { brand: 'google-pixel', name: 'Pixel 8a', price: 219, oldPrice: 249, cat: 'smartphones', tags: ['sale'] },
     { brand: 'google-pixel', name: '30W USB-C Charger', price: 9, cat: 'accessories', tags: [] },
@@ -1657,6 +1660,17 @@
       navigate('/');
       $('#shop-grid').scrollIntoView({ behavior: 'smooth' });
     });
+
+    var bdToggleBtn = $('#bdToggleBtn');
+    if (bdToggleBtn) {
+      bdToggleBtn.addEventListener('click', function () {
+        var wrap = $('#brandDirectoryWrap');
+        var open = wrap.classList.toggle('open');
+        bdToggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        bdToggleBtn.querySelector('span').textContent = open ? 'Hide brand directory' : 'Browse all brands (90+)';
+        if (open) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
 
     $('#cartBtn').addEventListener('click', openCart);
     $('#closeCart').addEventListener('click', closeCart);
