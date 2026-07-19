@@ -117,6 +117,21 @@
     <div class="trust-item">🇰🇼 <span>All 6 governorates</span></div>
   </section>
 
+  <!-- SPOTLIGHT -->
+  <section class="spotlight-section reveal" id="spotlight">
+    <span class="spotlight-glow g1" aria-hidden="true"></span>
+    <span class="spotlight-glow g2" aria-hidden="true"></span>
+    <div class="container spotlight-inner">
+      <div class="spotlight-heading">
+        <span class="eyebrow spotlight-eyebrow">This Season's Flagships</span>
+        <h2>Spotlight on what's new</h2>
+        <p class="spotlight-sub">Handpicked launches, in stock now with free delivery across Kuwait.</p>
+      </div>
+      <div class="spotlight-track" id="spotlightTrack"></div>
+      <div class="spotlight-dots" id="spotlightDots"></div>
+    </div>
+  </section>
+
   <!-- BRANDS -->
   <section class="brands-section container reveal" id="brands">
     <h2 class="section-title">Kuwait's Top Brands</h2>
@@ -350,7 +365,9 @@
 
       <!-- Add product -->
       <div class="admin-tab-panel" id="tab-add">
+        <h3 class="ap-form-title" id="apFormTitle">➕ Add a new product</h3>
         <form id="addProductForm" class="add-product-form">
+          <input type="hidden" id="apEditId" value="">
           <div class="form-grid">
             <label>Product name
               <input type="text" id="apName" required>
@@ -361,11 +378,15 @@
             <label>Category
               <select id="apCategory" required></select>
             </label>
-            <label>Price (USD)
-              <input type="number" id="apPrice" min="1" step="0.01" required>
+            <label>Price (KD)
+              <input type="number" id="apPrice" min="1" step="0.001" required>
+            </label>
+            <label>Old price / before discount (KD, optional)
+              <input type="number" id="apOldPrice" min="0" step="0.001" placeholder="Leave blank for no discount">
             </label>
             <label>Stock
               <input type="number" id="apStock" min="0" step="1" value="25" required>
+              <span class="hint" style="margin-top:4px;">Set to 0 to mark the product Out of Stock.</span>
             </label>
             <label>Rating (1–5)
               <input type="number" id="apRating" min="1" max="5" step="0.1" value="4.5">
@@ -381,14 +402,17 @@
             <img id="apPreview" class="ap-preview" alt="Product photo preview" hidden>
             <span id="apPreviewPlaceholder" class="ap-preview-placeholder">No photo selected — a generated placeholder will be used</span>
           </div>
-          <button class="btn btn-primary" type="submit">Add Product</button>
+          <div class="ap-form-actions">
+            <button class="btn btn-primary" type="submit" id="apSubmitBtn">Add Product</button>
+            <button class="btn btn-outline" type="button" id="apCancelEdit" hidden>Cancel edit</button>
+          </div>
           <p class="ap-success" id="apSuccess" hidden>✅ Product added to the live catalog!</p>
         </form>
       </div>
 
       <!-- Manage -->
       <div class="admin-tab-panel" id="tab-manage">
-        <p class="hint">Custom products you've added via this admin panel. Default catalog items aren't deletable in this demo.</p>
+        <p class="hint">Custom products you've added via this admin panel — edit price, stock, discount or details, or remove them. Default catalog items aren't deletable in this demo.</p>
         <div id="manageList" class="manage-list"></div>
       </div>
 
@@ -550,6 +574,17 @@
       </div>
     </div>
   </form>
+</div>
+
+<!-- ===== INVOICE MODAL ===== -->
+<div id="invoiceOverlay" class="overlay"></div>
+<div id="invoiceModal" class="modal invoice-modal" role="dialog" aria-modal="true">
+  <button class="modal-close" id="closeInvoiceModal" aria-label="Close">✕</button>
+  <div id="invoiceContent" class="invoice-content"></div>
+  <div class="invoice-actions">
+    <button class="btn btn-primary" id="invoicePrintBtn">🖨️ Print / Save as PDF</button>
+    <button class="btn btn-outline" id="invoiceCloseBtn">Close</button>
+  </div>
 </div>
 
 <!-- ===== TOASTS ===== -->
