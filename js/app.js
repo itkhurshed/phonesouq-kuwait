@@ -539,6 +539,13 @@
   }
 
   var BASE_PRODUCTS = buildProducts().concat(buildRealProducts());
+  // Deterministically mark a small, realistic slice of the catalog as
+  // out-of-stock (never the brand-new flagship arrivals) so the storefront
+  // can demo real in-stock / out-of-stock states.
+  BASE_PRODUCTS.forEach(function (p) {
+    if (p.tags.indexOf('new') !== -1) return;
+    if (hashStr(p.id + 'oos') % 23 === 0) p.stock = 0;
+  });
 
   /* ---------------------------------------------------------
      Storage-backed state
@@ -729,20 +736,23 @@
     var badges = '';
     if (p.tags.indexOf('sale') !== -1) badges += '<span class="pc-badge sale">-' + p.discountPct + '%</span>';
     if (p.tags.indexOf('new') !== -1) badges += '<span class="pc-badge new">New</span>';
-    if (p.stock > 0 && p.stock <= 5) badges += '<span class="pc-badge low">Only ' + p.stock + ' left</span>';
     var wished = isWished(p.id);
+    var oos = p.stock === 0;
+    var stockClass = oos ? 'out' : (p.stock <= 5 ? 'low' : 'in');
+    var stockLabel = oos ? 'Out of Stock' : (p.stock <= 5 ? 'Only ' + p.stock + ' left' : 'In Stock');
     return '' +
-      '<div class="product-card" data-id="' + p.id + '">' +
+      '<div class="product-card' + (oos ? ' is-oos' : '') + '" data-id="' + p.id + '">' +
       '<div class="pc-media" data-action="open">' +
       '<img src="' + p.images[0] + '" alt="' + escapeHtml(p.name) + '" loading="lazy">' +
       '<div class="pc-badges">' + badges + '</div>' +
       '<button class="pc-wish ' + (wished ? 'active' : '') + '" data-action="wish" aria-label="Toggle wishlist">' + (wished ? '♥' : '♡') + '</button>' +
-      '<button class="pc-quickadd" data-action="quickadd">+ Add to Cart</button>' +
+      (oos ? '<div class="pc-oos-overlay">Out of Stock</div>' : '<button class="pc-quickadd" data-action="quickadd">+ Add to Cart</button>') +
       '</div>' +
       '<div class="pc-body">' +
       '<span class="pc-brand">' + escapeHtml(p.brand) + '</span>' +
       '<span class="pc-name" data-action="open">' + escapeHtml(p.name) + '</span>' +
       '<span class="pc-rating">' + renderStars(p.rating) + ' <span>(' + p.reviews + ')</span></span>' +
+      '<span class="pc-stock ' + stockClass + '"><span class="dot"></span>' + stockLabel + '</span>' +
       '<div class="pc-price-row">' +
       '<span class="pc-price">' + formatMoney(p.price) + '</span>' +
       (p.oldPrice ? '<span class="pc-old-price">' + formatMoney(p.oldPrice) + '</span>' : '') +
@@ -843,6 +853,67 @@
       }).join('');
       return '<div class="bd-group"><h3>' + g.label + '</h3><div class="bd-chips">' + chips + '</div></div>';
     }).join('');
+  }
+
+  /* ---------------------------------------------------------
+     Homepage Spotlight — animated flagship highlight carousel
+  --------------------------------------------------------- */
+  var spotlightTimer = null;
+  var spotlightIndex = 0;
+  var spotlightIds = [];
+
+  function renderSpotlight() {
+    var track = $('#spotlightTrack');
+    var dots = $('#spotlightDots');
+    if (!track || !dots) return;
+
+    var picks = state.products.filter(function (p) {
+      return p.tags.indexOf('new') !== -1 && p.category === 'smartphones';
+    }).sort(function (a, b) { return b.price - a.price; }).slice(0, 5);
+
+    if (!picks.length) {
+      picks = state.products.slice().sort(function (a, b) { return b.rating - a.rating; }).slice(0, 3);
+    }
+
+    spotlightIds = picks.map(function (p) { return p.id; });
+
+    track.innerHTML = picks.map(function (p, i) {
+      var desc = p.description.length > 118 ? p.description.slice(0, 118) + '…' : p.description;
+      return '' +
+        '<div class="spotlight-item' + (i === 0 ? ' active' : '') + '" data-id="' + p.id + '">' +
+        '<div class="spotlight-media"><img src="' + p.images[0] + '" alt="' + escapeHtml(p.name) + '" loading="lazy"></div>' +
+        '<div class="spotlight-info">' +
+        '<span class="spotlight-brand">' + escapeHtml(p.brand) + ' · Just landed</span>' +
+        '<h3>' + escapeHtml(p.name) + '</h3>' +
+        '<p>' + escapeHtml(desc) + '</p>' +
+        '<div class="spotlight-price-row"><span class="spotlight-price">' + formatMoney(p.price) + '</span>' +
+        (p.oldPrice ? '<span class="spotlight-old">' + formatMoney(p.oldPrice) + '</span>' : '') +
+        '</div>' +
+        '<button class="btn spotlight-cta" data-action="spotlight-view" data-id="' + p.id + '">View Product <span aria-hidden="true">→</span></button>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+
+    dots.innerHTML = picks.length > 1 ? picks.map(function (p, i) {
+      return '<button type="button" class="spotlight-dot' + (i === 0 ? ' active' : '') + '" data-index="' + i + '" aria-label="Show highlight ' + (i + 1) + '"></button>';
+    }).join('') : '';
+
+    startSpotlightRotation(picks.length);
+  }
+
+  function setSpotlightSlide(i) {
+    spotlightIndex = i;
+    $$('.spotlight-item').forEach(function (el, idx) { el.classList.toggle('active', idx === i); });
+    $$('.spotlight-dot').forEach(function (el, idx) { el.classList.toggle('active', idx === i); });
+  }
+
+  function startSpotlightRotation(count) {
+    if (spotlightTimer) { clearInterval(spotlightTimer); spotlightTimer = null; }
+    spotlightIndex = 0;
+    if (count <= 1) return;
+    spotlightTimer = setInterval(function () {
+      setSpotlightSlide((spotlightIndex + 1) % count);
+    }, 4500);
   }
 
   function applyFiltersAndRender() {
@@ -1213,10 +1284,17 @@
     var custom = loadJSON(LS.customProducts, []);
     var el = $('#manageList');
     el.innerHTML = custom.length ? custom.map(function (p) {
+      var oos = p.stock === 0;
+      var stockChip = '<span class="manage-stock-chip ' + (oos ? 'out' : p.stock <= 5 ? 'low' : 'in') + '">' +
+        (oos ? '● Out of Stock' : p.stock <= 5 ? '● Only ' + p.stock + ' left' : '● In Stock (' + p.stock + ')') + '</span>';
+      var discountChip = p.oldPrice ? '<span class="manage-discount-chip">-' + p.discountPct + '% off</span>' : '';
       return '<div class="manage-row" data-id="' + p.id + '">' +
         '<img class="manage-thumb" src="' + p.images[0] + '" alt="">' +
-        '<div class="manage-info"><b>' + escapeHtml(p.name) + '</b>' + escapeHtml(p.brand) + ' · ' + formatMoney(p.price) + '</div>' +
-        '<button class="btn btn-outline btn-sm" data-action="delete-product">Delete</button>' +
+        '<div class="manage-info"><b>' + escapeHtml(p.name) + '</b>' + escapeHtml(p.brand) + ' · ' + formatMoney(p.price) +
+        (p.oldPrice ? ' <s class="manage-old-price">' + formatMoney(p.oldPrice) + '</s>' : '') +
+        '<div class="manage-chips">' + stockChip + discountChip + '</div></div>' +
+        '<button class="btn btn-outline btn-sm" data-action="edit-product">✏️ Edit</button>' +
+        '<button class="btn btn-outline btn-sm" data-action="delete-product">🗑️ Delete</button>' +
         '</div>';
     }).join('') : '<p class="hint">No custom products added yet. Use the "Add Product" tab.</p>';
   }
@@ -1226,12 +1304,95 @@
     var el = $('#ordersList');
     el.innerHTML = orders.length ? orders.map(function (o) {
       var s = window.Tracking.computeOrderStatus(o);
-      return '<div class="order-row">' +
+      return '<div class="order-row" data-order-id="' + o.id + '">' +
         '<div class="manage-info"><b>' + o.id + '</b>' + escapeHtml(o.customer.name) + ' · ' + escapeHtml(o.customer.governorate || '') + '</div>' +
         '<span class="order-status-chip">' + s.currentStep.icon + ' ' + s.currentStep.label + '</span>' +
         '<div style="font-weight:700">' + formatMoney(o.totals.total) + '</div>' +
+        '<button class="btn btn-outline btn-sm" data-action="view-invoice">🧾 Invoice</button>' +
         '</div>';
     }).join('') : '<p class="hint">No orders placed yet.</p>';
+  }
+
+  /* ---------------------------------------------------------
+     Invoice generation (admin → Orders tab)
+  --------------------------------------------------------- */
+  function invoiceHTML(order) {
+    var itemsRows = order.items.map(function (it) {
+      var lineTotal = it.price * it.qty;
+      return '<tr><td>' + escapeHtml(it.name) + '<br><span class="inv-item-brand">' + escapeHtml(it.brand || '') + '</span></td>' +
+        '<td>' + it.qty + '</td><td>' + formatMoney(it.price) + '</td><td>' + formatMoney(lineTotal) + '</td></tr>';
+    }).join('');
+    var payLabel = order.paymentMethod === 'knet' ? 'KNET' : order.paymentMethod === 'card' ? 'Credit / Debit Card' : 'Cash on Delivery';
+    var dateStr = new Date(order.createdAt).toLocaleString();
+    return '' +
+      '<div class="invoice-paper">' +
+      '<div class="invoice-head">' +
+      '<div class="invoice-brand"><span class="logo-mark">📱</span> Phone<span class="accent">Souq</span> <span class="inv-kw">Kuwait</span></div>' +
+      '<div class="invoice-meta"><h2>INVOICE</h2><div>Order <b>' + escapeHtml(order.id) + '</b></div><div>' + dateStr + '</div></div>' +
+      '</div>' +
+      '<div class="invoice-parties">' +
+      '<div><h4>Billed to</h4><p>' + escapeHtml(order.customer.name) + '<br>' + escapeHtml(order.customer.phone || '') + '<br>' + escapeHtml(order.email || '') + '<br>' +
+      escapeHtml(order.customer.address || '') + (order.customer.area ? ', ' + escapeHtml(order.customer.area) : '') + '<br>' + escapeHtml(order.customer.governorate || '') + ', Kuwait</p></div>' +
+      '<div><h4>Payment</h4><p>Method: ' + escapeHtml(payLabel) + '<br>Status: Confirmed<br>Currency: KD</p></div>' +
+      '</div>' +
+      '<table class="invoice-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>' +
+      '<tbody>' + itemsRows + '</tbody></table>' +
+      '<div class="invoice-totals">' +
+      '<div class="inv-total-row"><span>Subtotal</span><span>' + formatMoney(order.totals.subtotal) + '</span></div>' +
+      '<div class="inv-total-row"><span>Delivery</span><span>' + (order.totals.shipping === 0 ? 'FREE' : formatMoney(order.totals.shipping)) + '</span></div>' +
+      '<div class="inv-total-row grand"><span>Total</span><span>' + formatMoney(order.totals.total) + '</span></div>' +
+      '</div>' +
+      '<p class="invoice-footer">Thank you for shopping with PhoneSouq Kuwait. This is a system-generated invoice — no signature required. Demo store, no real payment was processed.</p>' +
+      '</div>';
+  }
+
+  function openInvoice(order) {
+    $('#invoiceContent').innerHTML = invoiceHTML(order);
+    $('#invoiceModal').classList.add('open');
+    $('#invoiceOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeInvoice() {
+    $('#invoiceModal').classList.remove('open');
+    $('#invoiceOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function computeDiscount(price, oldPriceRaw) {
+    var oldPrice = Number(oldPriceRaw) || 0;
+    if (!oldPrice || oldPrice <= price) return { oldPrice: null, discountPct: 0 };
+    return { oldPrice: oldPrice, discountPct: Math.round((oldPrice - price) / oldPrice * 100) };
+  }
+
+  function updateCustomProduct(id, data, photoDataUrl) {
+    var custom = loadJSON(LS.customProducts, []);
+    var existing = custom.find(function (p) { return p.id === id; });
+    if (!existing) return null;
+    var cat = CAT_MAP[data.category];
+    var disc = computeDiscount(data.price, data.oldPrice);
+    existing.name = data.name;
+    existing.brand = data.brand;
+    existing.brandId = slugify(data.brand);
+    existing.category = data.category;
+    existing.categoryName = cat.name;
+    existing.price = data.price;
+    existing.oldPrice = disc.oldPrice;
+    existing.discountPct = disc.discountPct;
+    existing.rating = data.rating;
+    existing.stock = data.stock;
+    existing.description = data.description;
+    existing.tags = existing.tags.filter(function (t) { return t !== 'sale'; });
+    if (disc.oldPrice) existing.tags.push('sale');
+    if (photoDataUrl) existing.images = [photoDataUrl, photoDataUrl];
+    saveJSON(LS.customProducts, custom);
+    refreshProducts();
+    if (window.Tracking) Tracking.trackEvent('admin_edit_product', { id: existing.id, name: existing.name });
+    return existing;
+  }
+
+  function getCustomProduct(id) {
+    return loadJSON(LS.customProducts, []).find(function (p) { return p.id === id; }) || null;
   }
 
   function addCustomProduct(data, photoDataUrl) {
@@ -1239,6 +1400,9 @@
     var colors = colorFor(data.brand);
     var img1 = photoDataUrl || productImage(data.brand, data.name, cat.icon, colors[0], colors[1]);
     var img2 = photoDataUrl || productImage(data.brand, data.name + ' — detail', cat.icon, colors[1], colors[0]);
+    var disc = computeDiscount(data.price, data.oldPrice);
+    var tags = ['new'];
+    if (disc.oldPrice) tags.push('sale');
     var product = {
       id: uid('custom'),
       idx: 9999,
@@ -1248,12 +1412,12 @@
       category: data.category,
       categoryName: cat.name,
       price: data.price,
-      oldPrice: null,
-      discountPct: 0,
+      oldPrice: disc.oldPrice,
+      discountPct: disc.discountPct,
       rating: data.rating,
       reviews: 0,
       stock: data.stock,
-      tags: ['new'],
+      tags: tags,
       description: data.description,
       specs: { Brand: data.brand, Category: cat.name, Added: new Date().toLocaleDateString() },
       images: [img1, img2],
@@ -1649,6 +1813,28 @@
       $('#shop-grid').scrollIntoView({ behavior: 'smooth' });
     });
 
+    var spotlightTrackEl = $('#spotlightTrack');
+    if (spotlightTrackEl) {
+      spotlightTrackEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action="spotlight-view"]');
+        if (!btn) return;
+        openProductModal(btn.dataset.id);
+      });
+      var spotlightSection = $('#spotlight');
+      spotlightSection.addEventListener('mouseenter', function () { if (spotlightTimer) clearInterval(spotlightTimer); });
+      spotlightSection.addEventListener('mouseleave', function () { startSpotlightRotation(spotlightIds.length); });
+    }
+    var spotlightDotsEl = $('#spotlightDots');
+    if (spotlightDotsEl) {
+      spotlightDotsEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.spotlight-dot');
+        if (!btn) return;
+        if (spotlightTimer) clearInterval(spotlightTimer);
+        setSpotlightSlide(Number(btn.dataset.index));
+        startSpotlightRotation(spotlightIds.length);
+      });
+    }
+
     $('#brandDirectory').addEventListener('click', function (e) {
       var chip = e.target.closest('.bd-chip');
       if (!chip) return;
@@ -1805,46 +1991,108 @@
       reader.readAsDataURL(file);
     });
 
+    function resetProductForm() {
+      $('#addProductForm').reset();
+      $('#apEditId').value = '';
+      pendingPhoto = null;
+      $('#apPreview').hidden = true;
+      $('#apPreviewPlaceholder').hidden = false;
+      $('#apFormTitle').textContent = '➕ Add a new product';
+      $('#apSubmitBtn').textContent = 'Add Product';
+      $('#apCancelEdit').hidden = true;
+    }
+
+    function enterEditMode(product) {
+      $('#apEditId').value = product.id;
+      $('#apName').value = product.name;
+      $('#apBrand').value = product.brand;
+      $('#apCategory').value = product.category;
+      $('#apPrice').value = product.price;
+      $('#apOldPrice').value = product.oldPrice || '';
+      $('#apStock').value = product.stock;
+      $('#apRating').value = product.rating;
+      $('#apDesc').value = product.description;
+      pendingPhoto = null;
+      $('#apPreview').src = product.images[0];
+      $('#apPreview').hidden = false;
+      $('#apPreviewPlaceholder').hidden = true;
+      $('#apFormTitle').textContent = '✏️ Edit product — ' + product.name;
+      $('#apSubmitBtn').textContent = 'Save Changes';
+      $('#apCancelEdit').hidden = false;
+      $$('.admin-tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === 'add'); });
+      $$('.admin-tab-panel').forEach(function (p) { p.classList.toggle('active', p.id === 'tab-add'); });
+      $('#tab-add').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    $('#apCancelEdit').addEventListener('click', function () {
+      resetProductForm();
+    });
+
     $('#addProductForm').addEventListener('submit', function (e) {
       e.preventDefault();
+      var editId = $('#apEditId').value;
       var data = {
         name: $('#apName').value.trim(),
         brand: $('#apBrand').value.trim(),
         category: $('#apCategory').value,
         price: Number($('#apPrice').value),
+        oldPrice: $('#apOldPrice').value === '' ? null : Number($('#apOldPrice').value),
         stock: Number($('#apStock').value),
         rating: Number($('#apRating').value) || 4.5,
         description: $('#apDesc').value.trim()
       };
-      addCustomProduct(data, pendingPhoto);
-      this.reset();
-      pendingPhoto = null;
-      $('#apPreview').hidden = true;
-      $('#apPreviewPlaceholder').hidden = false;
+      if (editId) {
+        updateCustomProduct(editId, data, pendingPhoto);
+        toast('Product updated', 'success');
+      } else {
+        addCustomProduct(data, pendingPhoto);
+        toast('Product added to catalog', 'success');
+      }
+      resetProductForm();
       $('#apSuccess').hidden = false;
       setTimeout(function () { $('#apSuccess').hidden = true; }, 3000);
       renderManageList();
       renderCategoryTabs();
       renderBrandFilterList();
       renderBrandsSection();
+      renderSpotlight();
       renderGrid();
-      toast('Product added to catalog', 'success');
     });
 
     $('#manageList').addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-action="delete-product"]');
-      if (!btn) return;
-      var row = btn.closest('.manage-row');
-      deleteCustomProduct(row.dataset.id);
-      renderManageList();
-      renderGrid();
-      renderBrandsSection();
-      toast('Product removed', 'info');
+      var row = e.target.closest('.manage-row');
+      if (!row) return;
+      var delBtn = e.target.closest('[data-action="delete-product"]');
+      var editBtn = e.target.closest('[data-action="edit-product"]');
+      if (delBtn) {
+        deleteCustomProduct(row.dataset.id);
+        renderManageList();
+        renderGrid();
+        renderBrandsSection();
+        renderSpotlight();
+        toast('Product removed', 'info');
+      } else if (editBtn) {
+        var product = getCustomProduct(row.dataset.id);
+        if (product) enterEditMode(product);
+      }
     });
+
+    $('#ordersList').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-action="view-invoice"]');
+      if (!btn) return;
+      var row = btn.closest('.order-row');
+      var order = window.Tracking ? window.Tracking.getOrderById(row.dataset.orderId) : null;
+      if (order) openInvoice(order);
+    });
+
+    $('#closeInvoiceModal').addEventListener('click', closeInvoice);
+    $('#invoiceCloseBtn').addEventListener('click', closeInvoice);
+    $('#invoiceOverlay').addEventListener('click', closeInvoice);
+    $('#invoicePrintBtn').addEventListener('click', function () { window.print(); });
 
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
-      closeCart(); closeProductModal(); closeCheckout();
+      closeCart(); closeProductModal(); closeCheckout(); closeInvoice();
     });
 
     document.addEventListener('en:track', debounce(function () {
@@ -1866,6 +2114,7 @@
     if (statProducts) statProducts.dataset.count = state.products.length;
 
     renderBrandsSection();
+    renderSpotlight();
     renderCategoryTabs();
     renderBrandFilterList();
     renderRatingFilterList();
