@@ -120,9 +120,15 @@
   <!-- BRANDS -->
   <section class="brands-section container reveal" id="brands">
     <h2 class="section-title">Kuwait's Top Brands</h2>
-    <p class="section-sub">The brands our customers buy most — plus 90+ more in the full brand directory below.</p>
+    <p class="section-sub">The brands our customers buy most.</p>
     <div class="brand-grid" id="brandGrid"></div>
-    <div class="brand-directory" id="brandDirectory"></div>
+    <button type="button" class="bd-toggle-btn" id="bdToggleBtn" aria-expanded="false" aria-controls="brandDirectoryWrap">
+      <span>Browse all brands (90+)</span>
+      <svg class="bd-toggle-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 4.5 7 9l4.5-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="brand-directory-wrap" id="brandDirectoryWrap">
+      <div class="brand-directory" id="brandDirectory"></div>
+    </div>
   </section>
 
   <!-- DEALS -->
