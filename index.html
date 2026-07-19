@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoneSouq Kuwait — Mobiles, Tablets &amp; Accessories from Every Major Brand</title>
+<meta name="description" content="PhoneSouq Kuwait: shop smartphones, tablets, smartwatches and accessories from Apple, Samsung, Xiaomi and 110+ global brands. Prices in KD, KNET &amp; Cash on Delivery, free delivery across Kuwait, live order tracking.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect rx='20' width='100' height='100' fill='%236c5ce7'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== PRELOADER ===== -->
+<div id="preloader" aria-hidden="true">
+  <div class="loader-bolt">⚡</div>
+</div>
+
+<!-- ===== SKIP LINK ===== -->
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span class="topbar-msg">🇰🇼 Free delivery across Kuwait on orders over KD 25 &nbsp;•&nbsp; KNET &amp; Cash on Delivery available &nbsp;•&nbsp; 30‑day warranty returns</span>
+    <div class="topbar-right">
+      <a href="#/track" data-route="/track">Track Order</a>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HEADER / NAV ===== -->
+<header class="site-header" id="siteHeader">
+  <div class="container nav-inner">
+    <a href="#/" class="logo" data-route="/">
+      <span class="logo-mark">📱</span> Phone<span class="accent">Souq</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="#/" class="nav-link" data-route="/">Shop</a>
+      <a href="#deals" class="nav-link">Deals</a>
+      <a href="#brands" class="nav-link">Brands</a>
+      <a href="#/track" class="nav-link" data-route="/track">Track Order</a>
+    </nav>
+
+    <div class="nav-search">
+      <input type="search" id="searchInput" placeholder="Search products, brands…" aria-label="Search products">
+      <span class="search-icon">🔍</span>
+      <div id="searchSuggest" class="search-suggest"></div>
+    </div>
+
+    <div class="nav-icons">
+      <button id="accountBtn" class="icon-btn" aria-label="My Account" title="My Account" data-route-btn="/account">👤</button>
+      <button id="wishlistBtn" class="icon-btn" aria-label="Wishlist" title="Wishlist">
+        ♥ <span class="badge" id="wishlistCount">0</span>
+      </button>
+      <button id="cartBtn" class="icon-btn" aria-label="Cart" title="Cart">
+        🛒 <span class="badge" id="cartCount">0</span>
+      </button>
+      <button id="hamburger" class="icon-btn hamburger" aria-label="Menu" title="Menu">☰</button>
+    </div>
+  </div>
+
+  <!-- mobile nav -->
+  <div id="mobileNav" class="mobile-nav">
+    <a href="#/" class="nav-link" data-route="/">Shop</a>
+    <a href="#deals" class="nav-link">Deals</a>
+    <a href="#brands" class="nav-link">Brands</a>
+    <a href="#/track" class="nav-link" data-route="/track">Track Order</a>
+    <a href="#/account" class="nav-link" data-route="/account">My Account</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= SHOP VIEW ================= -->
+<section class="view" id="view-shop" data-view="/">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-shapes" aria-hidden="true">
+      <span class="shape s1"></span><span class="shape s2"></span><span class="shape s3"></span>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-copy reveal">
+        <span class="eyebrow">Kuwait's Mobile Marketplace</span>
+        <h1>Every phone brand, <br> under one <span class="accent">Souq</span></h1>
+        <p>Apple, Samsung, Xiaomi and 110+ global brands — genuine devices, KD pricing, KNET &amp; Cash on Delivery, and free delivery across Kuwait.</p>
+        <div class="hero-cta">
+          <a href="#shop-grid" class="btn btn-primary">Shop Now <span aria-hidden="true">→</span></a>
+          <a href="#/track" data-route="/track" class="btn btn-ghost">Track an Order</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num" data-count="42000">0</span><span class="stat-label">Happy customers</span></div>
+          <div class="stat"><span class="stat-num" id="statProductsCount" data-count="190">0</span><span class="stat-label">Products in stock</span></div>
+          <div class="stat"><span class="stat-num" id="statBrandsCount" data-count="114">0</span><span class="stat-label">Brands carried</span></div>
+          <div class="stat"><span class="stat-num" data-count="48" data-decimal="true">0</span><span class="stat-label">Avg. rating / 5</span></div>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <div class="hero-card card-a">📱</div>
+        <div class="hero-card card-b">📲</div>
+        <div class="hero-card card-c">🎧</div>
+        <div class="hero-card card-d">⌚</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="trust-strip container reveal">
+    <div class="trust-item">🚚 <span>Free delivery over KD 25</span></div>
+    <div class="trust-item">💳 <span>KNET, Card &amp; Cash on Delivery</span></div>
+    <div class="trust-item">↩️ <span>30‑day warranty returns</span></div>
+    <div class="trust-item">📍 <span>Live order tracking</span></div>
+    <div class="trust-item">🇰🇼 <span>All 6 governorates</span></div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brands-section container reveal" id="brands">
+    <h2 class="section-title">Kuwait's Top Brands</h2>
+    <p class="section-sub">The brands our customers buy most — plus 90+ more in the full brand directory below.</p>
+    <div class="brand-grid" id="brandGrid"></div>
+    <div class="brand-directory" id="brandDirectory"></div>
+  </section>
+
+  <!-- DEALS -->
+  <section class="deals-banner container reveal" id="deals">
+    <div class="deals-copy">
+      <span class="eyebrow">Limited time</span>
+      <h2>Up to 30% off select accessories &amp; last‑gen flagships</h2>
+      <p>Ends soon — prices update automatically at checkout.</p>
+    </div>
+    <a href="#shop-grid" class="btn btn-light" data-filter-deal="true">View Deals</a>
+  </section>
+
+  <!-- SHOP GRID -->
+  <section class="shop-section container" id="shop-grid">
+    <h2 class="section-title">All Products</h2>
+
+    <div class="shop-toolbar reveal">
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="toolbar-right">
+        <select id="sortSelect" aria-label="Sort products">
+          <option value="featured">Sort: Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="shop-layout">
+      <aside class="filters-panel reveal" id="filtersPanel">
+        <div class="filter-group">
+          <h3>Brand</h3>
+          <div id="brandFilterList" class="checkbox-list"></div>
+        </div>
+        <div class="filter-group">
+          <h3>Price</h3>
+          <div class="price-range">
+            <input type="range" id="priceRange" min="0" max="700" step="5" value="700">
+            <div class="price-range-label">Up to KD <span id="priceRangeVal">700</span></div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <h3>Rating</h3>
+          <div id="ratingFilterList" class="checkbox-list"></div>
+        </div>
+        <button class="btn btn-outline btn-block" id="clearFilters">Clear Filters</button>
+      </aside>
+
+      <div class="products-wrap">
+        <p class="results-count" id="resultsCount"></p>
+        <div class="product-grid" id="productGrid">
+          <!-- skeletons injected by JS then replaced -->
+        </div>
+        <p class="no-results" id="noResults" hidden>No products match your filters. Try clearing them.</p>
+        <div class="load-more-wrap" id="loadMoreWrap" hidden>
+          <p class="hint" id="loadMoreCount"></p>
+          <button class="btn btn-outline" id="loadMoreBtn">Load More Products</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter reveal">
+    <div class="container newsletter-inner">
+      <h2>Get 10% off your first order</h2>
+      <p>Join our list for drops, deals, and restock alerts.</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" required placeholder="you@example.com" aria-label="Email address">
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+</section>
+
+<!-- ================= TRACK ORDER VIEW ================= -->
+<section class="view" id="view-track" data-view="/track" hidden>
+  <div class="container narrow-section">
+    <h1 class="page-title">Track Your Order</h1>
+    <p class="page-sub">Enter your order ID and the email used at checkout to see live status.</p>
+
+    <form id="trackForm" class="track-form reveal">
+      <input type="text" id="trackOrderId" placeholder="Order ID (e.g. EN-10234)" required>
+      <input type="email" id="trackEmail" placeholder="Email used at checkout" required>
+      <button type="submit" class="btn btn-primary">Track</button>
+    </form>
+    <p class="hint">💡 Just placed a test order? Paste the Order ID shown on your confirmation screen.</p>
+
+    <div id="trackResult" class="track-result" hidden></div>
+    <div id="trackError" class="track-error" hidden>We couldn't find an order with that ID and email. Double‑check and try again.</div>
+  </div>
+</section>
+
+<!-- ================= ACCOUNT VIEW ================= -->
+<section class="view" id="view-account" data-view="/account" hidden>
+  <div class="container narrow-section">
+
+    <div id="authLoggedOut">
+      <h1 class="page-title">My Account</h1>
+      <p class="page-sub">Sign in to track your orders faster and save your delivery details.</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-tab="login">Log In</button>
+        <button class="auth-tab" data-auth-tab="signup">Sign Up</button>
+      </div>
+
+      <form id="loginForm" class="track-form auth-panel active" data-auth-panel="login">
+        <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email">
+        <div class="pw-field">
+          <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
+          <button type="button" class="pw-toggle" data-toggle="loginPassword">👁️</button>
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+        <p class="auth-error" id="loginError" hidden></p>
+        <p class="hint">Forgot your password? <a href="#" id="waForgotPassword">Chat with us on WhatsApp</a>.</p>
+      </form>
+
+      <form id="signupForm" class="track-form auth-panel" data-auth-panel="signup" hidden>
+        <input type="text" id="signupName" placeholder="Full name" required autocomplete="name">
+        <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email">
+        <input type="tel" id="signupPhone" placeholder="Mobile number (+965 5xxx xxxx)" autocomplete="tel">
+        <div class="pw-field">
+          <input type="password" id="signupPassword" placeholder="Password (min 8 characters)" required autocomplete="new-password">
+          <button type="button" class="pw-toggle" data-toggle="signupPassword">👁️</button>
+        </div>
+        <div class="pw-strength" id="pwStrength" hidden><span class="pw-strength-bar" id="pwStrengthBar"></span></div>
+        <p class="hint" id="pwStrengthLabel"></p>
+        <input type="password" id="signupConfirm" placeholder="Confirm password" required autocomplete="new-password">
+        <button class="btn btn-primary" type="submit">Create Account</button>
+        <p class="auth-error" id="signupError" hidden></p>
+      </form>
+    </div>
+
+    <div id="authLoggedIn" hidden>
+      <h1 class="page-title">Welcome back, <span id="acctName"></span></h1>
+      <p class="page-sub" id="acctEmail"></p>
+
+      <div class="panel-card">
+        <h3>Profile</h3>
+        <form id="profileForm" class="form-grid">
+          <label>Full name<input type="text" id="acctNameInput" required></label>
+          <label>Mobile number<input type="tel" id="acctPhoneInput"></label>
+        </form>
+        <button class="btn btn-outline btn-sm" id="saveProfileBtn">Save Changes</button>
+        <p class="ap-success" id="profileSuccess" hidden>✅ Profile updated.</p>
+      </div>
+
+      <div class="panel-card">
+        <h3>Change Password</h3>
+        <form id="changePwForm" class="form-grid">
+          <label>Current password<input type="password" id="cpCurrent" required></label>
+          <label>New password<input type="password" id="cpNew" required></label>
+        </form>
+        <button class="btn btn-outline btn-sm" id="changePwBtn">Update Password</button>
+        <p class="auth-error" id="changePwError" hidden></p>
+        <p class="ap-success" id="changePwSuccess" hidden>✅ Password updated.</p>
+      </div>
+
+      <div class="panel-card">
+        <h3>My Orders</h3>
+        <div id="acctOrders" class="orders-list"></div>
+      </div>
+
+      <button class="btn btn-outline" id="logoutBtn">Log Out</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= ADMIN VIEW ================= -->
+<section class="view" id="view-admin" data-view="/admin" hidden>
+  <div class="container">
+
+    <div id="adminLogin" class="admin-login reveal">
+      <h1 class="page-title">Admin Login</h1>
+      <p class="page-sub">Store owner access — manage products &amp; view analytics.</p>
+      <form id="adminLoginForm" class="track-form">
+        <input type="text" id="adminUsername" placeholder="Username" autocomplete="username" required>
+        <input type="password" id="adminPassword" placeholder="Password" autocomplete="current-password" required>
+        <button class="btn btn-primary" type="submit">Enter</button>
+      </form>
+      <p class="hint">💡 Demo login: <code>admin</code> / <code>P@ssw0rd</code></p>
+      <p class="admin-error" id="adminLoginError" hidden>Incorrect username or password.</p>
+    </div>
+
+    <div id="adminPanel" class="admin-panel" hidden>
+      <div class="admin-head">
+        <h1 class="page-title">Admin Dashboard</h1>
+        <button class="btn btn-outline" id="adminLogout">Log out</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="analytics">📊 Analytics</button>
+        <button class="admin-tab" data-tab="add">➕ Add Product</button>
+        <button class="admin-tab" data-tab="manage">📦 Manage Products</button>
+        <button class="admin-tab" data-tab="orders">🧾 Orders</button>
+      </div>
+
+      <!-- Analytics -->
+      <div class="admin-tab-panel active" id="tab-analytics">
+        <div class="stat-cards" id="statCards"></div>
+        <div class="analytics-grid">
+          <div class="panel-card">
+            <h3>Conversion Funnel</h3>
+            <div id="funnelChart" class="funnel-chart"></div>
+          </div>
+          <div class="panel-card">
+            <h3>Top Products by Views</h3>
+            <div id="topProductsChart" class="bar-chart"></div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3>Recent Activity</h3>
+          <div id="eventLog" class="event-log"></div>
+        </div>
+      </div>
+
+      <!-- Add product -->
+      <div class="admin-tab-panel" id="tab-add">
+        <form id="addProductForm" class="add-product-form">
+          <div class="form-grid">
+            <label>Product name
+              <input type="text" id="apName" required>
+            </label>
+            <label>Brand
+              <input type="text" id="apBrand" required placeholder="e.g. Zenith">
+            </label>
+            <label>Category
+              <select id="apCategory" required></select>
+            </label>
+            <label>Price (USD)
+              <input type="number" id="apPrice" min="1" step="0.01" required>
+            </label>
+            <label>Stock
+              <input type="number" id="apStock" min="0" step="1" value="25" required>
+            </label>
+            <label>Rating (1–5)
+              <input type="number" id="apRating" min="1" max="5" step="0.1" value="4.5">
+            </label>
+          </div>
+          <label>Description
+            <textarea id="apDesc" rows="3" required placeholder="Short product description…"></textarea>
+          </label>
+          <label>Product photo
+            <input type="file" id="apPhoto" accept="image/*">
+          </label>
+          <div class="ap-preview-wrap">
+            <img id="apPreview" class="ap-preview" alt="Product photo preview" hidden>
+            <span id="apPreviewPlaceholder" class="ap-preview-placeholder">No photo selected — a generated placeholder will be used</span>
+          </div>
+          <button class="btn btn-primary" type="submit">Add Product</button>
+          <p class="ap-success" id="apSuccess" hidden>✅ Product added to the live catalog!</p>
+        </form>
+      </div>
+
+      <!-- Manage -->
+      <div class="admin-tab-panel" id="tab-manage">
+        <p class="hint">Custom products you've added via this admin panel. Default catalog items aren't deletable in this demo.</p>
+        <div id="manageList" class="manage-list"></div>
+      </div>
+
+      <!-- Orders -->
+      <div class="admin-tab-panel" id="tab-orders">
+        <div id="ordersList" class="orders-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#/" class="logo" data-route="/"><span class="logo-mark">📱</span> Phone<span class="accent">Souq</span></a>
+      <p>Kuwait's mobile marketplace — every major phone brand, genuine devices, delivered fast.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Twitter">𝕏</a>
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="YouTube">▶</a>
+        <a href="#" aria-label="TikTok">♪</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#shop-grid">All Products</a>
+      <a href="#deals">Deals</a>
+      <a href="#brands">Brands</a>
+      <a href="#/track" data-route="/track">Track Order</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="#">Help Center</a>
+      <a href="#">Shipping &amp; Returns</a>
+      <a href="#">Warranty</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#/account" data-route="/account">My Account</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span id="year"></span> PhoneSouq Kuwait. All rights reserved. Demo store — no real payments are processed.</span>
+    <span class="payment-icons" aria-hidden="true">💳 🏦 💵 🔒</span>
+  </div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div id="cartOverlay" class="overlay"></div>
+<aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <h2>Your Cart</h2>
+    <button id="closeCart" class="icon-btn" aria-label="Close cart">✕</button>
+  </div>
+  <div id="cartItems" class="cart-items"></div>
+  <div id="cartEmpty" class="cart-empty">
+    <p>🛒 Your cart is empty</p>
+    <a href="#shop-grid" class="btn btn-outline" id="cartEmptyShop">Start Shopping</a>
+  </div>
+  <div class="drawer-footer" id="cartFooter">
+    <div class="cart-line"><span>Subtotal</span><span id="cartSubtotal">KD 0.000</span></div>
+    <div class="cart-line"><span>Delivery</span><span id="cartShipping">KD 0.000</span></div>
+    <div class="cart-line cart-total"><span>Total</span><span id="cartTotal">KD 0.000</span></div>
+    <p class="hint">No VAT is currently applied in Kuwait.</p>
+    <button class="btn btn-primary btn-block" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div id="productOverlay" class="overlay"></div>
+<div id="productModal" class="modal product-modal" role="dialog" aria-modal="true">
+  <button class="modal-close" id="closeProductModal" aria-label="Close">✕</button>
+  <div id="productModalBody" class="product-modal-body"></div>
+</div>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div id="checkoutOverlay" class="overlay"></div>
+<div id="checkoutModal" class="modal checkout-modal" role="dialog" aria-modal="true">
+  <button class="modal-close" id="closeCheckoutModal" aria-label="Close">✕</button>
+  <div class="checkout-steps">
+    <span class="cstep active" data-step="1">1. Shipping</span>
+    <span class="cstep" data-step="2">2. Payment</span>
+    <span class="cstep" data-step="3">3. Review</span>
+    <span class="cstep" data-step="4">4. Done</span>
+  </div>
+
+  <form id="checkoutForm">
+    <div class="checkout-panel active" data-panel="1">
+      <h3>Shipping details</h3>
+      <div class="form-grid">
+        <label>Full name<input type="text" id="coName" required></label>
+        <label>Email<input type="email" id="coEmail" required></label>
+        <label>Mobile number<input type="tel" id="coPhone" placeholder="+965 5xxx xxxx" required></label>
+        <label>Governorate
+          <select id="coGovernorate" required>
+            <option>Kuwait City (Al Asimah)</option>
+            <option>Hawalli</option>
+            <option>Farwaniya</option>
+            <option>Ahmadi</option>
+            <option>Jahra</option>
+            <option>Mubarak Al-Kabeer</option>
+          </select>
+        </label>
+        <label>Area / Block<input type="text" id="coCity" placeholder="e.g. Salmiya, Block 4" required></label>
+        <label class="span2">Address (Street, Building, Floor/Apt)<input type="text" id="coAddress" placeholder="Street 12, Building 5, Apt 3" required></label>
+      </div>
+      <button type="button" class="btn btn-primary" data-next="2">Continue to Payment</button>
+    </div>
+
+    <div class="checkout-panel" data-panel="2">
+      <h3>Payment (demo — no real charge)</h3>
+      <div class="pay-method-row" id="payMethodRow">
+        <label class="pay-method active"><input type="radio" name="payMethod" value="knet" checked> <span>💳 KNET</span></label>
+        <label class="pay-method"><input type="radio" name="payMethod" value="card"> <span>💳 Credit/Debit Card</span></label>
+        <label class="pay-method"><input type="radio" name="payMethod" value="cod"> <span>💵 Cash on Delivery</span></label>
+      </div>
+      <div class="form-grid" id="cardFieldsWrap" hidden>
+        <label class="span2">Card number<input type="text" id="coCard" placeholder="4242 4242 4242 4242" maxlength="19"></label>
+        <label>Expiry<input type="text" id="coExp" placeholder="MM/YY" maxlength="5"></label>
+        <label>CVC<input type="text" id="coCvc" placeholder="123" maxlength="4"></label>
+      </div>
+      <p class="hint" id="codHint" hidden>💵 Pay in cash when your order arrives. Please have the exact amount ready for the courier.</p>
+      <p class="hint">🔒 This is a simulated checkout for demo purposes — no real payment is processed and no card/KNET data is sent anywhere.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" data-back="1">Back</button>
+        <button type="button" class="btn btn-primary" data-next="3">Review Order</button>
+      </div>
+    </div>
+
+    <div class="checkout-panel" data-panel="3">
+      <h3>Review &amp; place order</h3>
+      <div id="reviewItems" class="review-items"></div>
+      <div id="reviewTotals" class="review-totals"></div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline" data-back="2">Back</button>
+        <button type="submit" class="btn btn-primary" id="placeOrderBtn">Place Order</button>
+      </div>
+    </div>
+
+    <div class="checkout-panel" data-panel="4">
+      <div class="order-success">
+        <div class="success-check">✓</div>
+        <h3>Order confirmed!</h3>
+        <p>Your order ID is</p>
+        <div class="order-id" id="confirmOrderId"></div>
+        <p class="hint">Save this ID to track your order status.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-outline" id="confirmTrackBtn">Track this order</button>
+          <button type="button" class="btn btn-primary" id="confirmCloseBtn">Continue Shopping</button>
+        </div>
+        <a href="#" id="confirmWhatsapp" target="_blank" rel="noopener" class="whatsapp-link">💬 Chat with us about this order on WhatsApp</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- ===== TOASTS ===== -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+<!-- ===== WHATSAPP CHAT ===== -->
+<a id="whatsappFab" class="whatsapp-fab" href="#" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp" title="Chat on WhatsApp">💬</a>
+
+<!-- ===== ADMIN ACCESS (discreet, bottom of page) ===== -->
+<button id="adminFab" class="admin-fab" aria-label="Admin login" title="Admin">⚙️</button>
+
+<script src="js/catalog-real.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/tracking.js" defer></script>
+<script src="js/auth.js" defer></script>
+</body>
+</html>
